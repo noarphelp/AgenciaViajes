@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración - Reservas</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-image: url('/viajes.jpg');
+          color: #333;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          text-align: center;
+        }
+        .contenedor {
+          background-color: #fff;
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+          width: 80%;
+          max-width: 600px;
+        }
+        input[type="text"],
+        input[type="password"] {
+          width: 100%;
+          padding: 10px;
+          margin: 10px 0;
+          border: 1px solid #FFD700;
+          border-radius: 5px;
+          background-color: #f4f4f4;
+          font-size: 1.1em;
+        }
+        button {
+          background-color: #FFD700;
+          color: #333;
+          border: none;
+          padding: 15px 30px;
+          font-size: 1.2em;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-top: 20px;
+          width: 100%;
+        }
+        button:hover {
+          background-color: #ffcc00;
+        }
+        table {
+          width: 100%;
+          margin-top: 20px;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 12px;
+          text-align: left;
+          border: 1px solid #ddd;
+        }
+        th {
+          background-color: #FFD700;
+        }
+    </style>
+    <script>
+        // Variables globales para almacenar credenciales del admin
+        let usuarioGuardado = null;
+        let passwordGuardado = null;
+
+        // Función simplificada de login para admin:
+        // Solo se acepta si el usuario es "admin" y la contraseña es "1234"
+        async function login() {
+          const usuario = document.getElementById("usuario").value;
+          const password = document.getElementById("password").value;
+
+          if (!usuario || !password) {
+            alert("Por favor, ingresa usuario y contraseña.");
+            return;
+          }
+
+          // Validación simplificada: se acepta únicamente admin:1234
+          if (usuario === "admin" && password === "1234") {
+            usuarioGuardado = usuario;
+            passwordGuardado = password;
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("adminPanel").style.display = "block";
+          } else {
+            alert("Usuario o contraseña incorrectos, o no tienes permisos de administrador.");
+          }
+        }
+
+        // Función para obtener reservas de un hotel específico
+        async function obtenerReservas() {
+          if (!usuarioGuardado || !passwordGuardado) {
+            alert("Debes iniciar sesión primero.");
+            return;
+          }
+
+          const hotel = document.getElementById("nombreHotel").value;
+          if (!hotel) {
+            alert("Por favor, ingresa el nombre del hotel.");
+            return;
+          }
+
+          try {
+            const respuesta = await fetch("http://localhost:9000/sreservas/reservas/allReservas/" + hotel, {
+              method: "GET",
+              headers: {
+                "Authorization": "Basic " + btoa(`${usuarioGuardado}:${passwordGuardado}`)
+              }
+            });
+
+            if (!respuesta.ok) {
+              throw new Error("No se pueden obtener las reservas o acceso no autorizado");
+            }
+
+            const reservas = await respuesta.json();
+            mostrarReservas(reservas);
+          } catch (error) {
+            alert("Error al obtener las reservas: " + error.message);
+          }
+        }
+
+        // Función para mostrar las reservas en la tabla
+        function mostrarReservas(reservas) {
+    const tabla = document.getElementById("tablaReservas");
+    tabla.innerHTML = ""; // Limpiar tabla anterior
+
+    if (!reservas || reservas.length === 0) {
+        tabla.innerHTML = "<tr><td colspan='5'>No hay reservas para este hotel.</td></tr>";
+        return;
+    }
+
+    reservas.forEach(reserva => {
+        // Depuración: Verifica qué propiedades tiene cada objeto reserva
+        console.log("Objeto reserva recibido:", reserva);
+
+        const id = reserva.idReserva ?? "N/A";
+        const nombre = reserva.nombreCliente ?? "N/A";
+        const dni = reserva.dniCliente ?? "N/A";
+        const idVuelo = reserva.idVuelo ?? "N/A";
+        const idHotel = reserva.idHotel ?? "N/A";
+
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+            <td>${id}</td>
+            <td>${nombre}</td>
+            <td>${dni}</td>
+            <td>${idVuelo}</td>
+            <td>${idHotel}</td>
+        `;
+        tabla.appendChild(fila);
+    });
+}
+
+        function cerrarSesion() {
+    // Eliminar credenciales almacenadas en localStorage o sessionStorage
+    localStorage.removeItem("adminUser");
+    localStorage.removeItem("adminPass");
+
+    // Redirigir al index.html
+    window.location.href = "/index";
+}
+
+
+    </script>
+</head>
+<body>
+<!-- Formulario de inicio de sesión -->
+<div class="contenedor" id="loginForm">
+    <h1>Acceso Administrador</h1>
+    <input type="text" id="usuario" placeholder="Usuario">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="login()">Iniciar Sesión</button>
+</div>
+
+<!-- Panel de administración (inicialmente oculto) -->
+<div class="contenedor" id="adminPanel" style="display: none;">
+    <h1>Panel de Administración</h1>
+    <label>Nombre del Hotel:</label>
+    <input type="text" id="nombreHotel" placeholder="Ingresa el nombre del hotel">
+    <button onclick="obtenerReservas()">Ver Reservas</button>
+    <table>
+        <thead>
+        <tr>
+            <th>ID Reserva</th>
+            <th>Nombre Cliente</th>
+            <th>DNI</th>
+            <th>Hotel</th>
+            <th>Vuelo</th>
+        </tr>
+        </thead>
+        <tbody id="tablaReservas">
+        <!-- Aquí se llenarán las reservas -->
+        </tbody>
+    </table>
+    <button onclick="window.location.href='/index'">Volver al Home</button>
+    <button onclick="cerrarSesion()" style="background-color: red; margin-top: 15px;">Cerrar Sesión</button>
+
+</div>
+</body>
+</html>

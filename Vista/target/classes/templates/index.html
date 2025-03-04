@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Vuelos y Hoteles</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/viajes.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .contenedor {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #FFD700;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        label {
+            font-size: 1.2em;
+            display: block;
+            margin-top: 10px;
+            color: #FFD700;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        input[type="number"] {
+            width: 100px;
+        }
+
+        button {
+            background-color: #FFD700;
+            color: #333;
+            border: none;
+            padding: 15px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ffcc00;
+        }
+
+        .admin-link {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        // Cargar hoteles
+        async function cargarHoteles() {
+            try {
+                const respuesta = await fetch("http://localhost:9000/shotel/hotel/all");
+                if (!respuesta.ok) throw new Error("No se pudieron obtener los hoteles");
+
+                const hoteles = await respuesta.json();
+                console.log("Hoteles recibidos:", hoteles);  // Para depuración
+                const selectHoteles = document.getElementById("hoteles");
+                selectHoteles.innerHTML = '<option value="">Selecciona un hotel</option>';
+
+                hoteles.forEach(hotel => {
+                    selectHoteles.innerHTML += `
+                        <option value="${hotel.idHotel}">
+                            ${hotel.nombre} (${hotel.categoria}) - ${hotel.precio}€
+                        </option>`;
+                });
+            } catch (error) {
+                alert("Error al cargar los hoteles: " + error.message);
+            }
+        }
+
+        // Cargar vuelos
+       async function cargarVuelos() {
+    try {
+        const respuesta = await fetch("http://localhost:9000/svuelos/vuelos/all");
+        if (!respuesta.ok) throw new Error("No se pudieron obtener los vuelos");
+
+        const vuelos = await respuesta.json();
+        console.log("Vuelos recibidos:", vuelos);
+        const selectVuelos = document.getElementById("vuelos");
+        selectVuelos.innerHTML = '<option value="">Selecciona un vuelo</option>';
+
+        vuelos.forEach(vuelo => {
+            // Utilizar la propiedad 'vueloId' que tienen tus objetos de vuelo
+            let vueloId = vuelo.vueloId;
+            if (!vueloId) {
+                console.warn("No se encontró vueloId para este vuelo:", vuelo);
+                return;
+            }
+            const fechaFormateada = vuelo.fechaVuelo ? new Date(vuelo.fechaVuelo).toLocaleDateString("es-ES") : "Fecha no disponible";
+            const opcionTexto = `${vuelo.compañia} | ${fechaFormateada} | ${vuelo.precio}€ - ${vuelo.plazasDisponibles} plazas`;
+            selectVuelos.innerHTML += `<option value="${vueloId}">${opcionTexto}</option>`;
+        });
+    } catch (error) {
+        alert("Error al cargar los vuelos: " + error.message);
+    }
+}
+
+async function cargarHoteles() {
+    try {
+        const respuesta = await fetch("http://localhost:9000/shotel/hotel/all");
+        if (!respuesta.ok) throw new Error("No se pudieron obtener los hoteles");
+
+        const hoteles = await respuesta.json();
+        console.log("Hoteles recibidos:", hoteles);
+        const selectHoteles = document.getElementById("hoteles");
+        selectHoteles.innerHTML = '<option value="">Selecciona un hotel</option>';
+
+        hoteles.forEach(hotel => {
+            selectHoteles.innerHTML += `
+                <option value="${hotel.idHotel}">
+                    ${hotel.nombre} (${hotel.categoria}) - ${hotel.precio}€
+                </option>`;
+        });
+    } catch (error) {
+        alert("Error al cargar los hoteles: " + error.message);
+    }
+}
+
+async function realizarReserva() {
+    const nombre = document.getElementById("nombre").value;
+    const dni = document.getElementById("dni").value;
+    const idHotel = document.getElementById("hoteles").value;
+    const idVuelo = document.getElementById("vuelos").value;
+    const plazas = document.getElementById("plazas").value;
+
+    // Verifica que se haya seleccionado un vuelo válido
+    if (!nombre || !dni || !idHotel || !idVuelo || !plazas || idVuelo.trim() === "" || idVuelo === "null") {
+        alert("Todos los campos son obligatorios. Debes seleccionar un vuelo válido");
+        return;
+    }
+
+    const reservaData = {
+        nombreCliente: nombre,
+        dniCliente: dni,
+        idHotel: Number(idHotel),
+        idVuelo: Number(idVuelo),
+        cantidadPersonas: Number(plazas)
+    };
+
+    console.log("JSON enviado:", JSON.stringify(reservaData));
+
+    try {
+        const respuesta = await fetch("http://localhost:9000/sreservas/reservas/newReserva", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+
+            },
+            credentials: "include",
+            body: JSON.stringify(reservaData)
+        });
+
+        const respuestaTexto = await respuesta.text();
+        console.log("Respuesta del backend:", respuestaTexto);
+
+        if (!respuesta.ok) {
+            const mensajeError = data.message || data.error || `Error ${respuesta.status}: ${respuesta.statusText}`;
+            throw new Error(mensajeError);
+        }
+
+        alert("✅ Reserva realizada con éxito");
+        document.getElementById("nombre").value = "";
+        document.getElementById("dni").value = "";
+        document.getElementById("plazas").value = "";
+
+    } catch (error) {
+        console.error("❌ Error completo en la reserva:", error);
+        alert(`❌ Error al reservar: ${error.message}`);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarHoteles();
+    cargarVuelos();
+    document.getElementById("hoteles").addEventListener("change", cargarVuelos);
+});
+
+
+    </script>
+</head>
+<body>
+<div class="contenedor">
+    <h1>Reserva de Vuelos y Hoteles</h1>
+    <label for="hoteles">Hotel:</label>
+    <select id="hoteles"></select>
+
+    <label for="vuelos">Vuelo:</label>
+    <select id="vuelos"></select>
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre">
+
+    <label for="dni">DNI:</label>
+    <input type="text" id="dni">
+
+    <label for="plazas">Plazas:</label>
+    <input type="number" id="plazas" min="1">
+
+    <button onclick="realizarReserva()">Reservar</button>
+
+    <div class="admin-link">
+        <button onclick="window.location.href='/admin'">Acceder al Admin</button>
+    </div>
+</div>
+</body>
+</html>
