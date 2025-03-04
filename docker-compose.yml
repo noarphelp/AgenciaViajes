@@ -1,0 +1,131 @@
+version: 4.28.0 # docker-compose version
+
+services: # servicios que se van a ejecutar
+  api-image-hotel:
+    image: api-image-hotel  # nombre de la imagen
+    container_name: hotel
+    build: # construcción de la imagen automáticamente
+        context: ./Hoteles  # localización del Dockerfile
+        dockerfile: Dockerfile  # archivo Dockerfile
+
+    ports:
+      - "8000:8000"  # puerto de conexión entre el contenedor y el host
+    networks:
+      - spring-network  # nombre de la red
+    depends_on:
+        - mysql  # dependencia del contenedor mysql
+
+
+  
+  api-image-reservas:
+    image: api-image-reservas  # nombre de la imagen
+    container_name: reservas
+    build: # construcción de la imagen automáticamente
+        context: ./Reservas  # localización del Dockerfile
+        dockerfile: Dockerfile  # archivo Dockerfile
+
+    ports:
+      - "8002:8002"  # puerto de conexión entre el contenedor y el host
+    networks:
+      - spring-network  # nombre de la red
+    depends_on:
+        - mysql  # dependencia del contenedor mysql      
+
+  
+  api-image-vuelos:
+    image: api-image-vuelos  # nombre de la imagen
+    container_name: vuelos
+    build: # construcción de la imagen automáticamente
+        context: ./Vuelos  # localización del Dockerfile
+        dockerfile: Dockerfile  # archivo Dockerfile
+
+    ports:
+      - "8001:8001"  # puerto de conexión entre el contenedor y el host
+    networks:
+      - spring-network  # nombre de la red
+    depends_on:
+        - mysql  # dependencia del contenedor mysql  
+
+  api-image-vista:
+    image: api-image-vista  # nombre de la imagen
+    container_name: vista
+    build: # construcción de la imagen automáticamente
+        context: ./Vista  # localización del Dockerfile
+        dockerfile: Dockerfile  # archivo Dockerfile
+
+    ports:
+      - "8080:8080"  # puerto de conexión entre el contenedor y el host
+    networks:
+      - spring-network  # nombre de la red
+    depends_on:
+        - mysql  # dependencia del contenedor mysql      
+
+
+  
+  api-image-configserver:
+    image: api-image-configserver  # nombre de la imagen
+    container_name: configserver
+    build: # construcción de la imagen automáticamente
+        context: ./ServerConfigPF  # localización del Dockerfile
+        dockerfile: Dockerfile  # archivo Dockerfile
+
+    ports:
+      - "8888:8888"  # puerto de conexión entre el contenedor y el host
+    networks:
+      - spring-network  # nombre de la red
+    depends_on:
+        - mysql  # dependencia del contenedor mysql      
+ 
+  
+  api-image-eurekaServer:
+    image: api-image-eureka  # nombre de la imagen
+    container_name: eureka
+    build: # construcción de la imagen automáticamente
+        context: ./EurekaServerPF  # localización del Dockerfile
+        dockerfile: Dockerfile  # archivo Dockerfile
+
+    ports:
+      - "8761:8761"  # puerto de conexión entre el contenedor y el host
+    networks:
+      - spring-network  # nombre de la red
+    depends_on:
+        - mysql  # dependencia del contenedor mysql     
+
+  api-image-gateway:
+    image: api-image-gateway  # nombre de la imagen
+    container_name: gateway
+    build: # construcción de la imagen automáticamente
+        context: ./GatewayPF  # localización del Dockerfile
+        dockerfile: Dockerfile  # archivo Dockerfile
+
+    ports:
+      - "9000:9000"  # puerto de conexión entre el contenedor y el host
+    networks:
+      - spring-network  # nombre de la red
+    depends_on:
+        - mysql  # dependencia del contenedor mysql            
+
+ 
+ 
+  mysql:
+    image: mysql  # nombre de la imagen
+    container_name: mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: 1234post # contraseña de la base de datos
+        MYSQL_PASSWORD: 1234fer  # contraseña del usuario
+    ports:
+      - "3307:3306"  # puerto de conexión entre el contenedor y el host
+    networks:
+     - spring-network
+    volumes:
+      - mysql-volume:/var/lib/mysql  # volumen de persistencia de datos
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
+
+networks:
+  spring-network:  #nombre de red, sirve para que los contenedores se comuniquen entre sí
+
+volumes:  #nombre de volumen sirve para persistir datos y no perderlos al reiniciar el contenedor
+    mysql-volume:
+
+
+

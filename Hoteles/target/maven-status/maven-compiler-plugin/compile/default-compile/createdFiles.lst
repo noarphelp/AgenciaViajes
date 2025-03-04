@@ -1,0 +1,6 @@
+com/PF/Hoteles/model/Hotel.class
+com/PF/Hoteles/service/service/HotelService.class
+com/PF/Hoteles/repository/HotelRepository.class
+com/PF/Hoteles/HotelesApplication.class
+com/PF/Hoteles/service/ImpServiceHotel.class
+com/PF/Hoteles/controller/HotelController.class
