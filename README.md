@@ -149,7 +149,7 @@ GET /gateway/reservas/{id}   → Consultar reserva
 
 ---
 
-## 👨‍💻 Créditos #créditos
+## 👨‍💻 Créditos (#créditos)
 
 Proyecto desarrollado por **[@noarphelp](https://github.com/noarphelp)** como ejemplo educativo de arquitectura de microservicios.
 
