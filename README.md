@@ -8,17 +8,17 @@ Ideal como proyecto de referencia educativa o base para aplicaciones reales.
 
 ## 📑 Tabla de contenidos
 
-1. [Visión general](#visión-general)  
-2. [Arquitectura del sistema](#arquitectura-del-sistema)  
-3. [Tecnologías usadas](#tecnologías-usadas)  
-4. [Estructura del repositorio y módulos](#estructura-del-repositorio-y-módulos)  
-5. [Requisitos previos](#requisitos-previos)  
-6. [Guía de instalación y despliegue](#guía-de-instalación-y-despliegue)  
-7. [Cómo ejecutar](#cómo-ejecutar)  
-8. [Endpoints y APIs](#endpoints-y-apis)  
-9. [Pruebas](#pruebas)  
-10. [Mejoras futuras](#mejoras-futuras)  
-11. [Créditos](#créditos) 
+1. [Visión general](#🌍-visión-general)  
+2. [Arquitectura del sistema](#🏗-arquitectura-del-sistema)  
+3. [Tecnologías usadas](#⚙️-tecnologías-usadas)  
+4. [Estructura del repositorio y módulos](#📂-estructura-del-repositorio-y-módulos)  
+5. [Requisitos previos](#🛠-requisitos-previos)  
+6. [Guía de instalación y despliegue](#🚀-guía-de-instalación-y-despliegue)  
+7. [Cómo ejecutar](#▶️-cómo-ejecutar)  
+8. [Endpoints y APIs](#📡-endpoints-y-apis)  
+9. [Pruebas](#✅-pruebas)  
+10. [Mejoras futuras](#🌱-mejoras-futuras)  
+11. [Créditos](#👨‍💻-créditos)
 
 ---
 
