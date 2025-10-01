@@ -18,8 +18,7 @@ Ideal como proyecto de referencia educativa o base para aplicaciones reales.
 8. [Endpoints y APIs](#endpoints-y-apis)  
 9. [Pruebas](#pruebas)  
 10. [Mejoras futuras](#mejoras-futuras)  
-11. [Créditos](#créditos)  
-12. [Licencia](#licencia)
+11. [Créditos](#créditos) 
 
 ---
 
@@ -149,7 +148,7 @@ GET /gateway/reservas/{id}   → Consultar reserva
 
 ---
 
-## 👨‍💻 Créditos (#créditos)
+## 👨‍💻 Créditos 
 
 Proyecto desarrollado por **[@noarphelp](https://github.com/noarphelp)** como ejemplo educativo de arquitectura de microservicios.
 
