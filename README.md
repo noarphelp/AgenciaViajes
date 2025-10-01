@@ -1,6 +1,4 @@
 <img width="1024" height="1024" alt="agenciaViajes" src="https://github.com/user-attachments/assets/dd38a646-e423-4473-9147-3c5faa33f522" />
-
-
 # AgenciaViajes 🛫🏨
 
 Una plataforma de microservicios para la gestión integral de una agencia de viajes: vuelos, hoteles y reservas, con arquitectura distribuida y orquestada.  
@@ -35,21 +33,21 @@ Su propósito es demostrar un patrón realista de microservicios con servicios i
 
 ## 🏗 Arquitectura del sistema
 
-- **Eureka Server / Service Discovery**: Registro y descubrimiento de instancias de microservicios.  
-- **Gateway**: Punto de entrada (API Gateway) que enruta las peticiones hacia los servicios correspondientes.  
+- **Eureka Server / Service Discovery**: registro y descubrimiento de instancias de microservicios.  
+- **Gateway**: punto de entrada (API Gateway) que enruta las peticiones hacia los servicios correspondientes.  
 - **Microservicios**:  
   - Servicio **Vuelos**  
   - Servicio **Hoteles**  
   - Servicio **Reservas**  
   - Configuración centralizada mediante **ServerConfig**  
-- **Vista / Frontend**: Interfaz de cliente para realizar búsquedas y reservas.  
+- **Vista / Frontend**: interfaz de cliente para realizar búsquedas y reservas.  
 - **docker-compose** para orquestar y levantar el sistema completo localmente.
 
 ---
 
 ## ⚙️ Tecnologías usadas
 
-- **Java / Spring Boot** (para cada microservicio)  
+- **Java / Spring Boot** (cada microservicio)  
 - **Spring Cloud / Netflix OSS** (Eureka, Config Server, Gateway)  
 - **Docker & Docker Compose**  
 - **Bases de datos relacionales** (MySql)  
@@ -78,89 +76,90 @@ Su propósito es demostrar un patrón realista de microservicios con servicios i
 - **Maven** o **Gradle**  
 - **Docker & Docker Compose**  
 - **Git**  
-- (Opcional) **IDE** como IntelliJ, Eclipse o VS Code  
+-  **IDE** como IntelliJ, Eclipse o VS Code  
 
 ---
 
-🚀 Guía de instalación y despliegue
+## 🚀 Guía de instalación y despliegue
 
-Clona el repositorio:
+1. Clona el repositorio:
 
-git clone https://github.com/noarphelp/AgenciaViajes.git
-cd AgenciaViajes
+   ```bash
+   git clone https://github.com/noarphelp/AgenciaViajes.git
+   cd AgenciaViajes
+   ```
 
-<div align="center">
+**Construye los módulos:**  
 
-Construye los módulos:
-
+```bash
 mvn clean install
+```
 
+**Levanta el sistema con Docker Compose:**  
 
-Levanta el sistema con Docker Compose:
-
+```bash
 docker-compose up --build
+```
 
+**Verifica los servicios en el dashboard de Eureka** (puerto configurado en `EurekaServerPF`).
 
-Verifica los servicios en el dashboard de Eureka (puerto configurado en EurekaServerPF).
+---
 
-</div>
-▶️ Cómo ejecutar
-<div align="center">
+## ▶️ Cómo ejecutar
 
-Accede al Gateway para consumir la API.
+- Accede al **Gateway** para consumir la API.  
+- Usa la interfaz de **Vista** para consultar vuelos, hoteles y realizar reservas.  
+- **El flujo es:** Frontend → Gateway → Microservicios.
 
-Usa la interfaz de Vista para consultar vuelos, hoteles y realizar reservas.
+---
 
-El flujo es: Frontend → Gateway → Microservicios.
-
-</div>
-📡 Endpoints y APIs
-<div align="center">
+## 📡 Endpoints y APIs
 
 Ejemplos de endpoints (según configuración del gateway y servicios):
 
-GET /gateway/vuelos          → Listar vuelos  
-GET /gateway/vuelos/{id}     → Obtener datos de un vuelo  
-GET /gateway/hoteles         → Listar hoteles  
-POST /gateway/reservas       → Crear una reserva  
+```http
+GET /gateway/vuelos          → Listar vuelos
+GET /gateway/vuelos/{id}     → Obtener datos de un vuelo
+GET /gateway/hoteles         → Listar hoteles
+POST /gateway/reservas       → Crear una reserva
 GET /gateway/reservas/{id}   → Consultar reserva
+```
+
+⚠️ Las rutas reales están definidas en los archivos de propiedades (`servicio-*.properties`).
+
+---
+
+## ✅ Pruebas
+
+- **Unitarias:** JUnit / Mockito en cada módulo.  
+- **Integración:** validación del flujo entre microservicios.  
+- **End-to-End:** Postman, Newman u otras herramientas de testing web.  
+
+---
+
+## 🌱 Mejoras futuras
+
+- Autenticación y autorización (JWT, OAuth2).  
+- Gestión de usuarios y perfiles.  
+- Balanceo de carga y tolerancia a fallos (Resilience4j/Hystrix).  
+- Documentación de APIs con Swagger / OpenAPI.  
+- Monitorización (Actuator, Prometheus, Grafana).  
+- Integración con pasarelas de pago.  
+- Soporte multi-idioma y multi-moneda.  
+
+---
+
+## 👨‍💻 Créditos #créditos
+
+Proyecto desarrollado por **[@noarphelp](https://github.com/noarphelp)** como ejemplo educativo de arquitectura de microservicios.
+
+---
 
 
-⚠️ Las rutas reales están definidas en los archivos de propiedades (servicio-*.properties).
 
-</div>
-✅ Pruebas
-<div align="center">
 
-Unitarias: JUnit / Mockito en cada módulo.
+  
 
-Integración: validación del flujo entre microservicios.
 
-End-to-End: Postman, Newman u otras herramientas de testing web.
 
-</div>
-🌱 Mejoras futuras
-<div align="center">
 
-Autenticación y autorización (JWT, OAuth2).
-
-Gestión de usuarios y perfiles.
-
-Balanceo de carga y tolerancia a fallos (Resilience4j/Hystrix).
-
-Documentación de APIs con Swagger / OpenAPI.
-
-Monitorización (Actuator, Prometheus, Grafana).
-
-Integración con pasarelas de pago.
-
-Soporte multi-idioma y multi-moneda.
-
-</div>
-👨‍💻 Créditos
-<div align="center">
-
-Proyecto desarrollado por @noarphelp
- como ejemplo educativo de arquitectura de microservicios.
-
-</div>
