@@ -82,55 +82,66 @@ Su propósito es demostrar un patrón realista de microservicios con servicios i
 
 ---
 
-## 🚀 Guía de instalación y despliegue
+🚀 Guía de instalación y despliegue
 
-1. Clona el repositorio:
+Clona el repositorio:
 
-   ```bash
-   git clone https://github.com/noarphelp/AgenciaViajes.git
-   cd AgenciaViajes
+git clone https://github.com/noarphelp/AgenciaViajes.git
+cd AgenciaViajes
+
+<div align="center">
+
 Construye los módulos:
 
-bash
-Copiar código
 mvn clean install
+
+
 Levanta el sistema con Docker Compose:
 
-bash
-Copiar código
 docker-compose up --build
+
+
 Verifica los servicios en el dashboard de Eureka (puerto configurado en EurekaServerPF).
 
+</div>
 ▶️ Cómo ejecutar
+<div align="center">
+
 Accede al Gateway para consumir la API.
 
 Usa la interfaz de Vista para consultar vuelos, hoteles y realizar reservas.
 
 El flujo es: Frontend → Gateway → Microservicios.
 
+</div>
 📡 Endpoints y APIs
+<div align="center">
+
 Ejemplos de endpoints (según configuración del gateway y servicios):
 
-GET /gateway/vuelos → Listar vuelos
+GET /gateway/vuelos          → Listar vuelos  
+GET /gateway/vuelos/{id}     → Obtener datos de un vuelo  
+GET /gateway/hoteles         → Listar hoteles  
+POST /gateway/reservas       → Crear una reserva  
+GET /gateway/reservas/{id}   → Consultar reserva
 
-GET /gateway/vuelos/{id} → Obtener datos de un vuelo
-
-GET /gateway/hoteles → Listar hoteles
-
-POST /gateway/reservas → Crear una reserva
-
-GET /gateway/reservas/{id} → Consultar reserva
 
 ⚠️ Las rutas reales están definidas en los archivos de propiedades (servicio-*.properties).
 
+</div>
 ✅ Pruebas
+<div align="center">
+
 Unitarias: JUnit / Mockito en cada módulo.
 
 Integración: validación del flujo entre microservicios.
 
 End-to-End: Postman, Newman u otras herramientas de testing web.
 
+</div>
 🌱 Mejoras futuras
+<div align="center">
+
 Autenticación y autorización (JWT, OAuth2).
 
 Gestión de usuarios y perfiles.
@@ -145,6 +156,11 @@ Integración con pasarelas de pago.
 
 Soporte multi-idioma y multi-moneda.
 
+</div>
 👨‍💻 Créditos
-Proyecto desarrollado por @noarphelp como ejemplo educativo de arquitectura de microservicios.
+<div align="center">
 
+Proyecto desarrollado por @noarphelp
+ como ejemplo educativo de arquitectura de microservicios.
+
+</div>
